@@ -1,0 +1,1 @@
+{"root":["./src/index.ts","./src/db/db.ts","./src/middleware/auth.ts","./src/models/posts.ts","./src/models/users.ts","./src/routes/auth.ts","./src/routes/protected.ts","./src/types/env.d.ts","./src/types/express.d.ts","./src/utils/jwt.ts"],"version":"5.6.3"}
