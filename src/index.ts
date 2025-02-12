@@ -4,17 +4,21 @@ import connectDB from './db/db'
 import mongoose from 'mongoose';
 import authRoutes from './routes/auth';
 import protectedRoutes from "./routes/protected";
+import fileRoutes from "./routes/file";
 import dotenv from "dotenv";
+import path from "path";
+
 dotenv.config()
 const router = express.Router()
 
 const app = express()
 const port = 6969;
-const frontEntPort = 3000
+const frontEndPort = 3000
+app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
 app.use(express.json())
 app.use(cors({
-    origin: `http://localhost:${frontEntPort}`,
+    origin: `http://localhost:${frontEndPort}`,
     methods: ['POST', 'GET'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }))
@@ -37,6 +41,7 @@ app.get('/test-db', async (_, res: Response) => {
 
 app.use('/auth', authRoutes);
 app.use('/protected', protectedRoutes);
+app.use('/file', fileRoutes);
 // Start Server
 app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);
