@@ -1,7 +1,10 @@
 import jwt, {JwtPayload} from 'jsonwebtoken';
 import {NextFunction, Request, Response} from 'express';
 import * as process from "node:process";
-
+import {ApiResponse} from "../utils/ApiResponse";
+const sendResponse = (res: Response, status: number, response: ApiResponse) => {
+    res.status(status).json(response);
+};
 export interface CustomRequest extends Request {
     user?: JwtPayload;
 }
@@ -12,7 +15,9 @@ export const authenticateToken = (req: CustomRequest, res: Response, next: NextF
     const authHeader = req.headers['authorization'];
     const token = authHeader?.split(' ')[1];
     if (!token) {
-        res.status(401).json({message: 'Token missing or invalid'});
+        sendResponse(res, 401, {
+            error: { code: "ERR", title: 'Unauthorized', message: "Internal server error" },
+        })
         return
     }
     try{
@@ -22,11 +27,16 @@ export const authenticateToken = (req: CustomRequest, res: Response, next: NextF
     }
     catch(err: any){
         if (err?.name === 'TokenExpiredError') {
-            res.status(401).json({message: 'Token Expired'})
+            sendResponse(res, 401, {
+                error: { code: "ERR", title: 'Unauthorized', message: "Token Expired" },
+            })
             return
         }
         if (err) {
             res.status(403).json({message: 'Invalid token'});
+            sendResponse(res, 403, {
+                error: { code: "ERR", title: 'Access Denied', message: "Invalid token" },
+            })
             return
 
         }

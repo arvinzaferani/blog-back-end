@@ -15,7 +15,6 @@ router.post('/post', auth_1.authenticateToken, async (req, res, next) => {
         res.status(200).json({ ...saved, message: 'Post successfully created' });
     }
     catch (err) {
-        console.log(err, 'catch err');
         next(err);
     }
 });
