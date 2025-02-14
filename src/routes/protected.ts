@@ -108,7 +108,8 @@ router.post('/posts', authenticateToken, async (req: CustomRequest, res: Respons
 })
 router.get('/users/posts/:id', authenticateToken, async (req: CustomRequest, res: Response, next: NextFunction) => {
     try {
-        const {id} = req.params
+        const id = req.params?.id === '1' ? req.user?.id : req.params?.id
+
         const {page, limit} = req.query
         const pageNum = parseInt(page as string)
         const limitNum = parseInt(limit as string)
